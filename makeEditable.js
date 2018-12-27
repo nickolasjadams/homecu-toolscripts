@@ -1,6 +1,6 @@
 // call function with type: 'whole' or 'partial'
 function makeEditable(type, wrapperId, rateType, serverNum) {
-	var meta = '<meta HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT"><meta HTTP-EQUIV="Pragma" CONTENT="no-cache"><meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">';	
+	var meta = '\n<meta HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">\n<meta HTTP-EQUIV="Pragma" CONTENT="no-cache">\n<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">\n';	
 	if (serverNum == 5) {
 		var cgiType = 'bin';
 	} else {
@@ -11,7 +11,7 @@ function makeEditable(type, wrapperId, rateType, serverNum) {
 		fileName = fileName[0].split('/');
 		fileName = fileName[fileName.length - 1];
 
-	var form = '<form action="https://www' + serverNum + '.homecu.net/cgi-' + cgiType + '/editform.pl" name="rates" method="post">' + '<input type="hidden" name="next_page" value="' + window.location.href + '"><input type="hidden" name="source" value=".edit-' + fileName + 'frm.html"><input type="hidden" name="target" value="' + fileName + '.html">';
+	var form = '\n<form action="https://www' + serverNum + '.homecu.net/cgi-' + cgiType + '/editform.pl" name="rates" method="post">\n' + '<input type="hidden" name="next_page" value="' + window.location.href + '">\n<input type="hidden" name="source" value=".edit-' + fileName + 'frm.html">\n<input type="hidden" name="target" value="' + fileName + '.html">\n';
 	var cells = document.getElementsByTagName('td');
 	var cellsArray = [];
 
@@ -28,7 +28,7 @@ function makeEditable(type, wrapperId, rateType, serverNum) {
 		td.innerHTML = clear;
 		td.innerHTML = ui;
 		td.children[0].value = saveVal;
-	})
+	});
 
 	var ta = document.createElement('textarea');
 	ta.setAttribute('id', 'allCode');
@@ -41,18 +41,22 @@ function makeEditable(type, wrapperId, rateType, serverNum) {
 
 	if (type === 'whole') {
 		var all = document.documentElement.outerHTML;
-		allCode.value = '<!DOCTYPE html>' + all;
+		allCode.value = '<!DOCTYPE html>\n' + all;
 		console.log('A \'whole\' page has been created in Textarea below');
 	} else if (type === 'partial' && wrapperId != undefined) {
 		var all = document.getElementById(wrapperId).innerHTML;
-		allCode.value = '<!DOCTYPE html><html lang="en"><head><title>Edit ' + rateType + ' Rates</title>' + meta + '</head><body>'
+		allCode.value = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<title>Edit ' + rateType + ' Rates</title>' + meta + '</head>\n<body>\n'
 		+ form
-		+ all + '<input type="submit" value="Save Changes"></form></body></html>';
+		+ all + '<input type="submit" value="Save Changes">\n</form>\n</body>\n</html>';
 		console.log('A \'partial\' page has been created in Textarea below');
 		console.log('Go make neccessary edits to form data');
 	} else {
 		console.log('Please check %c\'type\' %cand %c\'wrapperId\' %cparameters', 'color: orange;', 'color: black;', 'color: orange;', 'color: black;');
 	}
+
+	allCode.select();
+	document.execCommand("copy");
+	console.log('Copied To Clipboard');
 
 }
 makeEditable('partial', 'srates', 'Savings', 6);
